@@ -59,4 +59,13 @@ export class TaskManager {
   async listTasks(): Promise<Task[]> {
     return this.readTasks();
   }
+
+  async listAllTasks(): Promise<Task[]> {
+    return this.readTasks();
+  }
+
+  async listTasksByStatus(status: Task["status"]): Promise<Task[]> {
+    const tasks = await this.readTasks();
+    return tasks.filter((task) => task.status === status);
+  }
 }

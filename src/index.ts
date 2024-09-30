@@ -3,7 +3,7 @@
 import { Command } from "commander";
 import inquirer from "inquirer";
 import chalk from "chalk";
-import { TaskManager } from "./TaskManager.js";
+import { TaskManager, Task } from "./TaskManager.js";
 
 const taskManager = new TaskManager();
 
@@ -52,6 +52,44 @@ async function deleteTask(): Promise<void> {
     console.error(chalk.red("Error deleting task:"), error);
   }
 }
+function formatTaskStatus(status: Task["status"]): string {
+  switch (status) {
+    case "todo":
+      return chalk.yellow("To Do");
+    case "in_progress":
+      return chalk.blue("In Progress");
+    case "done":
+      return chalk.green("Done");
+  }
+}
+
+async function listTasks(options: { status?: Task["status"] }): Promise<void> {
+  try {
+    let tasks: Task[];
+    if (options.status) {
+      tasks = await taskManager.listTasksByStatus(options.status);
+    } else {
+      tasks = await taskManager.listAllTasks();
+    }
+
+    if (tasks.length === 0) {
+      console.log(chalk.yellow("No tasks found."));
+      return;
+    }
+
+    console.log(chalk.bold("\nID | Status | Title"));
+    console.log(chalk.bold("-------------------"));
+    tasks.forEach((task) => {
+      console.log(
+        `${chalk.cyan(task.id.toString().padEnd(3))}| ${formatTaskStatus(
+          task.status
+        ).padEnd(10)}| ${task.title}`
+      );
+    });
+  } catch (error) {
+    console.error(chalk.red("Error listing tasks:"), error);
+  }
+}
 
 const program = new Command();
 
@@ -62,5 +100,25 @@ program
 program.command("add").description("Add a new task").action(addTask);
 
 program.command("delete").description("Delete a task").action(deleteTask);
+
+program
+  .command("list")
+  .description("List all tasks")
+  .option(
+    "-s, --status <status>",
+    "Filter tasks by status (todo, in_progress, done)"
+  )
+  .action(async (options) => {
+    if (
+      options.status &&
+      !["todo", "in_progress", "done"].includes(options.status)
+    ) {
+      console.error(
+        chalk.red("Invalid status. Use todo, in_progress, or done.")
+      );
+      return;
+    }
+    await listTasks(options);
+  });
 
 program.parse(process.argv);
