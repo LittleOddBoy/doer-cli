@@ -1,0 +1,31 @@
+{
+  "name": "doer",
+  "version": "1.0.0",
+  "description": "A CLI tool, as a task management solution, with Node.js",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LittleOddBoy/doer.git"
+  },
+  "keywords": [
+    "nodejs",
+    "js",
+    "roadmap.sh",
+    "cli"
+  ],
+  "author": "LittleOddBoy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LittleOddBoy/doer/issues"
+  },
+  "homepage": "https://github.com/LittleOddBoy/doer#readme",
+  "type": "module",
+  "bin": {
+    "doer": "index.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^9.4.0",
+    "inquirer": "^8.2.4"
+  }
+}
