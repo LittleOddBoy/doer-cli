@@ -3,38 +3,9 @@
 import { Command } from "commander";
 import inquirer from "inquirer";
 import chalk from "chalk";
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
+import { TaskManager } from "./TaskManager.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-interface Task {
-  id: number;
-  title: string;
-  status: "todo" | "in_progress" | "done";
-}
-
-const TASKS_FILE = path.join(__dirname, "../tasks.json");
-
-async function readTasks(): Promise<Task[]> {
-  try {
-    const data = await fs.readFile(TASKS_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-}
-
-async function writeTasks(tasks: Task[]): Promise<void> {
-  try {
-    await fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2));
-  } catch (error) {
-    console.error(chalk.red("Error saving tasks:"), error);
-    process.exit(1);
-  }
-}
+const taskManager = new TaskManager();
 
 async function addTask(): Promise<void> {
   const { title } = await inquirer.prompt([
@@ -47,17 +18,39 @@ async function addTask(): Promise<void> {
     },
   ]);
 
-  const tasks = await readTasks();
-  const newTask: Task = {
-    id: tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1,
-    title: title.trim(),
-    status: "todo",
-  };
+  try {
+    await taskManager.addTask(title);
+    console.log(chalk.green("Task added successfully!"));
+  } catch (error) {
+    console.error(chalk.red("Error adding task:"), error);
+  }
+}
 
-  tasks.push(newTask);
-  await writeTasks(tasks);
+async function deleteTask(): Promise<void> {
+  const tasks = await taskManager.listTasks();
+  if (tasks.length === 0) {
+    console.log(chalk.yellow("No tasks to delete."));
+    return;
+  }
 
-  console.log(chalk.green("Task added successfully!"));
+  const { taskId } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "taskId",
+      message: "Select a task to delete:",
+      choices: tasks.map((task) => ({
+        name: `${task.id}: ${task.title}`,
+        value: task.id,
+      })),
+    },
+  ]);
+
+  try {
+    await taskManager.deleteTask(taskId);
+    console.log(chalk.green("Task deleted successfully!"));
+  } catch (error) {
+    console.error(chalk.red("Error deleting task:"), error);
+  }
 }
 
 const program = new Command();
@@ -67,5 +60,7 @@ program
   .description("Doer - A simple task management CLI tool");
 
 program.command("add").description("Add a new task").action(addTask);
+
+program.command("delete").description("Delete a task").action(deleteTask);
 
 program.parse(process.argv);
