@@ -5,6 +5,10 @@ import inquirer from "inquirer";
 import chalk from "chalk";
 import { TaskManager, Task } from "./TaskManager.js";
 
+import CheckboxPlusPrompt from "inquirer-checkbox-plus-prompt";
+// const inquirerCheckboxPlusPromptt = new inquirerCheckboxPlusPrompt();
+inquirer.registerPrompt("checkbox-plus", CheckboxPlusPrompt as any);
+
 const taskManager = new TaskManager();
 
 async function addTask(): Promise<void> {
@@ -91,6 +95,59 @@ async function listTasks(options: { status?: Task["status"] }): Promise<void> {
   }
 }
 
+async function markTasks(): Promise<void> {
+  const tasks = await taskManager.listAllTasks();
+  if (tasks.length === 0) {
+    console.log(chalk.yellow("No tasks available to mark."));
+    return;
+  }
+
+  let currentIndex = 0;
+  let exit = false;
+
+  while (!exit) {
+    const choices = tasks.map((task, index) => ({
+      name: `${task.id}: ${task.title} (${formatTaskStatus(task.status)})${
+        index === currentIndex ? " <" : ""
+      }`,
+      value: index,
+      short: `Task ${task.id}`,
+    }));
+
+    choices.push({ name: "Exit", value: choices.length, short: "Exit" });
+
+    const { action } = await inquirer.prompt([
+      {
+        type: "list",
+        name: "action",
+        message:
+          "Select a task to mark (use arrow keys, press Enter to toggle status, or select Exit):",
+        choices: choices,
+        default: currentIndex,
+      },
+    ]);
+
+    if (action === "exit") {
+      exit = true;
+    } else {
+      currentIndex = action;
+      console.log(action);
+      const task = tasks[currentIndex];
+      const updatedTask = await taskManager.updateTaskStatus(task.id);
+      tasks[currentIndex] = updatedTask;
+      console.log(
+        chalk.green(
+          `Task ${updatedTask.id} marked as ${formatTaskStatus(
+            updatedTask.status
+          )}`
+        )
+      );
+    }
+  }
+
+  console.log(chalk.green("Task marking completed."));
+}
+
 const program = new Command();
 
 program
@@ -121,4 +178,8 @@ program
     await listTasks(options);
   });
 
+program
+  .command("mark")
+  .description("Mark tasks (toggle status)")
+  .action(markTasks);
 program.parse(process.argv);

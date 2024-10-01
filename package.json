@@ -30,7 +30,8 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^9.4.1",
-    "inquirer": "^8.2.5"
+    "inquirer": "^8.2.5",
+    "inquirer-checkbox-plus-prompt": "^1.4.2"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.3",

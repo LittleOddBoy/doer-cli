@@ -68,4 +68,20 @@ export class TaskManager {
     const tasks = await this.readTasks();
     return tasks.filter((task) => task.status === status);
   }
+
+  async updateTaskStatus(id: number): Promise<Task> {
+    const tasks = await this.readTasks();
+    const taskIndex = tasks.findIndex((task) => task.id === id);
+    if (taskIndex === -1) {
+      throw new Error("Task not found");
+    }
+
+    const statusOrder: Task["status"][] = ["todo", "in_progress", "done"];
+    const currentStatusIndex = statusOrder.indexOf(tasks[taskIndex].status);
+    const newStatusIndex = (currentStatusIndex + 1) % statusOrder.length;
+    tasks[taskIndex].status = statusOrder[newStatusIndex];
+
+    await this.writeTasks(tasks);
+    return tasks[taskIndex];
+  }
 }
