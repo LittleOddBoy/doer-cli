@@ -1,6 +1,6 @@
 # Doer - Command Line Task Manager
 
-Doer is a simple, yet powerful command-line task manager built with Node.js and TypeScript. It allows you to manage your tasks efficiently right from your terminal.
+Doer is a simple, yet powerful command-line task manager built with Node.js and TypeScript. It allows you to manage your tasks efficiently right from your terminal. This project is one of the projects related to [Node.js roadmap on the roadmap.sh](https://roadmap.sh/nodejs). All the information related to the project can be found in [the official project page on roadmap.sh](https://roadmap.sh/projects/task-tracker)
 
 ## Features
 
@@ -45,8 +45,8 @@ and use `doer` instead of `npm start` in all over the instructions in [Usage](#u
 
 Run the application using:
 
-```
-npm start -- [command]
+```bash
+npm start [command]
 ```
 
 Replace `[command]` with one of the following:
@@ -56,50 +56,46 @@ Replace `[command]` with one of the following:
 - `update`: Update a task's title
 - `mark`: Mark tasks as completed or change their status
 - `delete`: Delete a task
-- `filter`: Filter tasks by status
-- `search`: Search for tasks
-
+  
 ### Examples
 
 1. Add a new task:
 
-   ```
-   npm start -- add
+   ```bash
+   npm start add
    ```
 
 2. List all tasks:
 
+   ```bash
+   npm start list
    ```
-   npm start -- list
-   ```
+   and if you want to filter the list of tasks so you can see tasks filtered by their status, use:
+   
+```bash
+npm start list --status todo
+# or
+npm start list --status in_progress
+# or
+npm start list --status done
+```
 
 3. Update a task:
 
-   ```
-   npm start -- update
+   ```bash
+   npm start update
    ```
 
 4. Mark tasks:
 
-   ```
-   npm start -- mark
+   ```bash
+   npm start mark
    ```
 
 5. Delete a task:
 
-   ```
-   npm start -- delete
-   ```
-
-6. Filter tasks:
-
-   ```
-   npm start -- filter
-   ```
-
-7. Search tasks:
-   ```
-   npm start -- search
+   ```bash
+   npm start delete
    ```
 
 ## Contributing
