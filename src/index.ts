@@ -126,12 +126,10 @@ async function markTasks(): Promise<void> {
         default: currentIndex,
       },
     ]);
-
-    if (action === "exit") {
+    if (action == choices.length - 1) {
       exit = true;
     } else {
       currentIndex = action;
-      console.log(action);
       const task = tasks[currentIndex];
       const updatedTask = await taskManager.updateTaskStatus(task.id);
       tasks[currentIndex] = updatedTask;
