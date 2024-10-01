@@ -87,7 +87,7 @@ async function listTasks(options: { status?: Task["status"] }): Promise<void> {
       console.log(
         `${chalk.cyan(task.id.toString().padEnd(3))}| ${formatTaskStatus(
           task.status
-        ).padEnd(10)}| ${task.title}`
+        ).padEnd(10)} | ${task.title}`
       );
     });
   } catch (error) {
@@ -148,6 +148,48 @@ async function markTasks(): Promise<void> {
   console.log(chalk.green("Task marking completed."));
 }
 
+async function updateTask(): Promise<void> {
+  const tasks = await taskManager.listAllTasks();
+  if (tasks.length === 0) {
+    console.log(chalk.yellow("No tasks available to update."));
+    return;
+  }
+
+  const { taskId } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "taskId",
+      message: "Select a task to update:",
+      choices: tasks.map((task) => ({
+        name: `${task.id}: ${task.title} (${formatTaskStatus(task.status)})`,
+        value: task.id,
+      })),
+    },
+  ]);
+
+  const { newTitle } = await inquirer.prompt([
+    {
+      type: "input",
+      name: "newTitle",
+      message: "Enter the new title for the task:",
+      validate: (input: string) =>
+        input.trim().length > 0 || "Title cannot be empty",
+    },
+  ]);
+
+  try {
+    const updatedTask = await taskManager.updateTaskTitle(
+      taskId,
+      newTitle.trim()
+    );
+    console.log(
+      chalk.green(`Task updated successfully. New title: ${updatedTask.title}`)
+    );
+  } catch (error) {
+    console.error(chalk.red("Error updating task:"), error);
+  }
+}
+
 const program = new Command();
 
 program
@@ -182,4 +224,6 @@ program
   .command("mark")
   .description("Mark tasks (toggle status)")
   .action(markTasks);
+
+program.command("update").description("Update a task").action(updateTask);
 program.parse(process.argv);

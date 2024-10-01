@@ -84,4 +84,17 @@ export class TaskManager {
     await this.writeTasks(tasks);
     return tasks[taskIndex];
   }
+
+  public async updateTaskTitle(id: number, newTitle: string): Promise<Task> {
+    const tasks = await this.readTasks();
+    const taskIndex = tasks.findIndex((task) => task.id === id);
+
+    if (taskIndex === -1) {
+      throw new Error(`Task with id ${id} not found`);
+    }
+
+    tasks[taskIndex].title = newTitle;
+    await this.writeTasks(tasks);
+    return tasks[taskIndex];
+  }
 }
