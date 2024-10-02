@@ -2,6 +2,10 @@
 
 Doer is a simple, yet powerful command-line task manager built with Node.js and TypeScript. It allows you to manage your tasks efficiently right from your terminal. This project is one of the projects related to [Node.js roadmap on the roadmap.sh](https://roadmap.sh/nodejs). All the information related to the project can be found in [the official project page on roadmap.sh](https://roadmap.sh/projects/task-tracker). If you liked my project, I'd be happy if you give me a star and [upvote me here](https://roadmap.sh/projects/task-tracker/solutions?u=6572c5645145316d25d3c0ae).
 
+## Why do this project uses external libs?
+
+I saw nothing agains me to break the rules. Also, I think all the developers are here to develop cool things, not be a straight one when things get useless when you're simple as nothing. I don't say you should be complicated, I say I can be more fun, just this. Any project out there that didn't use external libs and kept things simple, is great! But my job is a little bit different. However, it's all up to you to choose.
+
 ## Features
 
 - Add new tasks
