@@ -4,25 +4,23 @@ Doer is a simple, yet powerful command-line task manager built with Node.js and 
 
 ## Why do this project uses external libs?
 
-I saw nothing agains me to break the rules. Also, I think all the developers are here to develop cool things, not be a straight one when things get useless when you're simple as nothing. I don't say you should be complicated, I say I can be more fun, just this. Any project out there that didn't use external libs and kept things simple, is great! But my job is a little bit different. However, it's all up to you to choose.
+I read the rules. Nevertheless, I saw nothing against me to break the rules, and also, I believe all the developers are here to build cool stuff. It doesn't mean that projects with simpler command-line-user-interface are boring, they're cool, too! It's just me decided to be different. Any project out there that didn't use external libs and kept things simple, is appreciated the same.
 
 ## Features
 
 - Add new tasks
-- List all tasks
+- List all tasks even by their status
 - Update task titles
 - Mark tasks as completed (or toggle status)
 - Delete tasks
-- Filter tasks by status
-- Search tasks
 
 ## Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/doer.git
-cd doer
+git clone https://github.com/LittleOddBoy/doer-cli.git
+cd doer-cli
 ```
 
 2. Install dependencies:
@@ -34,7 +32,7 @@ npm install
 3. Build the project:
 
 ```bash
-npm run build
+npm start
 ```
 
 4. If you want to, you can add it to your path (recommended):
@@ -60,53 +58,54 @@ Replace `[command]` with one of the following:
 - `update`: Update a task's title
 - `mark`: Mark tasks as completed or change their status
 - `delete`: Delete a task
-  
+
 ### Examples
 
 1. Add a new task:
 
-   ```bash
-   npm start add
-   ```
+```bash
+   doer add
+```
 
 2. List all tasks:
 
-   ```bash
-   npm start list
-   ```
-   and if you want to filter the list of tasks so you can see tasks filtered by their status, use:
-   
+```bash
+   doer list
+```
+
+and if you want to filter the list of tasks so you can see tasks filtered by their status, use:
+
 ```bash
 npm start list --status todo
 # or
-npm start list --status in_progress
+npm start list --status pending
 # or
 npm start list --status done
 ```
 
 3. Update a task:
 
-   ```bash
-   npm start update
-   ```
+```bash
+npm start update
+```
 
 4. Mark tasks:
 
-   ```bash
-   npm start mark
-   ```
+```bash
+npm start mark
+```
 
 5. Delete a task:
 
-   ```bash
-   npm start delete
-   ```
+```bash
+npm start delete
+```
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-There's nothing very special about this project, just note that this project is in plain TypeScript (wired word nah?) and I even appreciate pull requests that changes the whole way to implement things, so feel free to whatever you want ="). There's also some issues (I hope) in the issues section, so you can start there!
+There's nothing very special about this project, just note that this project is in plain TypeScript (wired word nah?) and I even appreciate pull requests that changes the whole way to implement things, so feel free to whatever you want. There's also some issues (I hope) in the issues section, so you can start there!
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Doer-cli is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
