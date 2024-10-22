@@ -4,9 +4,9 @@ import { Command } from "commander";
 import inquirer from "inquirer";
 import chalk from "chalk";
 import { TaskManager, Task } from "./TaskManager.js";
+import { formatTaskStatus } from "./utils.js";
 
 import CheckboxPlusPrompt from "inquirer-checkbox-plus-prompt";
-// const inquirerCheckboxPlusPromptt = new inquirerCheckboxPlusPrompt();
 inquirer.registerPrompt("checkbox-plus", CheckboxPlusPrompt as any);
 
 const taskManager = new TaskManager();
@@ -56,16 +56,6 @@ async function deleteTask(): Promise<void> {
     console.error(chalk.red("Error deleting task:"), error);
   }
 }
-function formatTaskStatus(status: Task["status"]): string {
-  switch (status) {
-    case "todo":
-      return chalk.yellow("To Do");
-    case "in_progress":
-      return chalk.blue("In Progress");
-    case "done":
-      return chalk.green("Done");
-  }
-}
 
 async function listTasks(options: { status?: Task["status"] }): Promise<void> {
   try {
@@ -87,7 +77,11 @@ async function listTasks(options: { status?: Task["status"] }): Promise<void> {
       console.log(
         `${chalk.cyan(task.id.toString().padEnd(3))}| ${formatTaskStatus(
           task.status
-        ).padEnd(10)} | ${task.title}`
+        ).padEnd(10)} | ${task.title} | ${chalk.yellow(
+          new Date(task.createdAt).toLocaleDateString("en-US")
+        )} | ${chalk.yellowBright(
+          new Date(task.updatedAt).toLocaleDateString("en-US")
+        )}`
       );
     });
   } catch (error) {
@@ -146,7 +140,7 @@ async function markTasks(): Promise<void> {
   console.log(chalk.green("Task marking completed."));
 }
 
-async function updateTask(): Promise<void> {
+async function updateTaskTitle(): Promise<void> {
   const tasks = await taskManager.listAllTasks();
   if (tasks.length === 0) {
     console.log(chalk.yellow("No tasks available to update."));
@@ -191,7 +185,7 @@ async function updateTask(): Promise<void> {
 const program = new Command();
 
 program
-  .version("1.0.0")
+  .version("1.0.1")
   .description("Doer - A simple task management CLI tool");
 
 program.command("add").description("Add a new task").action(addTask);
@@ -223,5 +217,5 @@ program
   .description("Mark tasks (toggle status)")
   .action(markTasks);
 
-program.command("update").description("Update a task").action(updateTask);
+program.command("update").description("Update a task").action(updateTaskTitle);
 program.parse(process.argv);

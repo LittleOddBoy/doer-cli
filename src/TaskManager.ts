@@ -9,6 +9,8 @@ export interface Task {
   id: number;
   title: string;
   status: "todo" | "in_progress" | "done";
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class TaskManager {
@@ -41,6 +43,8 @@ export class TaskManager {
       id: tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1,
       title: title.trim(),
       status: "todo",
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     tasks.push(newTask);
     await this.writeTasks(tasks);
@@ -80,6 +84,7 @@ export class TaskManager {
     const currentStatusIndex = statusOrder.indexOf(tasks[taskIndex].status);
     const newStatusIndex = (currentStatusIndex + 1) % statusOrder.length;
     tasks[taskIndex].status = statusOrder[newStatusIndex];
+    tasks[taskIndex].updatedAt = new Date();
 
     await this.writeTasks(tasks);
     return tasks[taskIndex];
@@ -94,6 +99,7 @@ export class TaskManager {
     }
 
     tasks[taskIndex].title = newTitle;
+    tasks[taskIndex].updatedAt = new Date();
     await this.writeTasks(tasks);
     return tasks[taskIndex];
   }
