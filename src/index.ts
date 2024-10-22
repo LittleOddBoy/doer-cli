@@ -203,16 +203,14 @@ program
   .description("List all tasks")
   .option(
     "-s, --status <status>",
-    "Filter tasks by status (todo, in_progress, done)"
+    "Filter tasks by status (todo, pending, done)"
   )
   .action(async (options) => {
     if (
       options.status &&
-      !["todo", "in_progress", "done"].includes(options.status)
+      !["todo", "pending", "done"].includes(options.status)
     ) {
-      console.error(
-        chalk.red("Invalid status. Use todo, in_progress, or done.")
-      );
+      console.error(chalk.red("Invalid status. Use todo, pending, or done."));
       return;
     }
     await listTasks(options);

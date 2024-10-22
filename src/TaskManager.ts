@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 export interface Task {
   id: number;
   title: string;
-  status: "todo" | "in_progress" | "done";
+  status: "todo" | "pending" | "done";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -80,7 +80,7 @@ export class TaskManager {
       throw new Error("Task not found");
     }
 
-    const statusOrder: Task["status"][] = ["todo", "in_progress", "done"];
+    const statusOrder: Task["status"][] = ["todo", "pending", "done"];
     const currentStatusIndex = statusOrder.indexOf(tasks[taskIndex].status);
     const newStatusIndex = (currentStatusIndex + 1) % statusOrder.length;
     tasks[taskIndex].status = statusOrder[newStatusIndex];
