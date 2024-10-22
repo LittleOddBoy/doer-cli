@@ -24,8 +24,7 @@
     "doer": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "tsc && node dist/index.js"
   },
   "dependencies": {
     "chalk": "^4.1.2",
