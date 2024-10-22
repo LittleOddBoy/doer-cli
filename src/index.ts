@@ -74,6 +74,7 @@ async function listTasks(options: { status?: Task["status"] }): Promise<void> {
 
     const table = new Table({
       head: ["ID", "Status", "Title", "Created at", "Updated At"],
+      colWidths: [7, 10, 30, 15, 15],
     });
 
     tasks.forEach((task) => {
