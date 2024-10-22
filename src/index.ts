@@ -5,6 +5,7 @@ import inquirer from "inquirer";
 import chalk from "chalk";
 import { TaskManager, Task } from "./TaskManager.js";
 import { formatTaskStatus } from "./utils.js";
+import Table from "cli-table3";
 
 import CheckboxPlusPrompt from "inquirer-checkbox-plus-prompt";
 inquirer.registerPrompt("checkbox-plus", CheckboxPlusPrompt as any);
@@ -71,19 +72,24 @@ async function listTasks(options: { status?: Task["status"] }): Promise<void> {
       return;
     }
 
-    console.log(chalk.bold("\nID | Status | Title"));
-    console.log(chalk.bold("-------------------"));
-    tasks.forEach((task) => {
-      console.log(
-        `${chalk.cyan(task.id.toString().padEnd(3))}| ${formatTaskStatus(
-          task.status
-        ).padEnd(10)} | ${task.title} | ${chalk.yellow(
-          new Date(task.createdAt).toLocaleDateString("en-US")
-        )} | ${chalk.yellowBright(
-          new Date(task.updatedAt).toLocaleDateString("en-US")
-        )}`
-      );
+    const table = new Table({
+      head: ["ID", "Status", "Title", "Created at", "Updated At"],
     });
+
+    tasks.forEach((task) => {
+      table.push([
+        chalk.redBright(task.id),
+        formatTaskStatus(task.status),
+        task.title,
+        chalk.green(
+          new Date(task.createdAt.toString()).toLocaleDateString("en-us")
+        ),
+        chalk.bgGreenBright(
+          new Date(task.updatedAt.toString()).toLocaleDateString("en-us")
+        ),
+      ]);
+    });
+    console.log(table.toString());
   } catch (error) {
     console.error(chalk.red("Error listing tasks:"), error);
   }
