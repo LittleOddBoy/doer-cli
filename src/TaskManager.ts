@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export interface Task {
-  id: number;
+  id: string;
   title: string;
   status: "todo" | "pending" | "done";
   createdAt: Date;
@@ -40,7 +40,7 @@ export class TaskManager {
   async addTask(title: string): Promise<void> {
     const tasks = await this.readTasks();
     const newTask: Task = {
-      id: tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1,
+      id: crypto.randomUUID(),
       title: title.trim(),
       status: "todo",
       createdAt: new Date(),
@@ -50,9 +50,9 @@ export class TaskManager {
     await this.writeTasks(tasks);
   }
 
-  async deleteTask(id: number): Promise<void> {
+  async deleteTask(id: string): Promise<void> {
     const tasks = await this.readTasks();
-    const index = tasks.findIndex((task) => task.id === id);
+    const index = tasks.findIndex((task) => task.id == id);
     if (index === -1) {
       throw new Error("Task not found");
     }
@@ -73,7 +73,7 @@ export class TaskManager {
     return tasks.filter((task) => task.status === status);
   }
 
-  async updateTaskStatus(id: number): Promise<Task> {
+  async updateTaskStatus(id: string): Promise<Task> {
     const tasks = await this.readTasks();
     const taskIndex = tasks.findIndex((task) => task.id === id);
     if (taskIndex === -1) {
@@ -90,7 +90,7 @@ export class TaskManager {
     return tasks[taskIndex];
   }
 
-  public async updateTaskTitle(id: number, newTitle: string): Promise<Task> {
+  public async updateTaskTitle(id: string, newTitle: string): Promise<Task> {
     const tasks = await this.readTasks();
     const taskIndex = tasks.findIndex((task) => task.id === id);
 
